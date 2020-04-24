@@ -195,7 +195,14 @@ def __loadConfigs( variables, variants ) :
 			__applyConfigOverrides( config, "variant:{}".format( variants[project] ) )
 		for variantProject, variant in variants.items() :
 			__applyConfigOverrides( config, "variant:{}:{}".format( variantProject, variant ) )
-		__applyConfigOverrides( config, "platform:osx" if sys.platform == "darwin" else "platform:linux" )
+
+		if sys.platform == "darwin":
+			__applyConfigOverrides( config, "platform:osx" )
+		elif sys.platform == "win32":
+			__applyConfigOverrides( config, "platform:windows" )
+		else:
+			__applyConfigOverrides( config, "platform:linux" )
+
 		if config.get( "enabled", True ) :
 			configs[project] = config
 

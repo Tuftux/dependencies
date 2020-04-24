@@ -88,4 +88,14 @@
 
 	},
 
+	"platform:windows" : {
+
+		"variables" : {
+
+			"extraArgs" : "",
+
+		},
+
+	},
+
 }

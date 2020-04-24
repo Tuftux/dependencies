@@ -55,4 +55,20 @@
 
 	},
 
+	"platform:windows" : {
+
+		"environment" : {
+
+			"tbb_os" : "windows",
+
+		},
+
+		"variables" : {
+
+			"installLibsCommand" : "cp build/windows_*_release/*.dll {buildDir}/lib",
+
+		},
+
+	},
+
 }

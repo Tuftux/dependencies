@@ -44,7 +44,7 @@
 
 		"downloads" : [
 
-			"https://www.python.org/ftp/python/2.7.15/Python-2.7.15.tgz",
+			"https://www.python.org/ftp/python/2.7.17/Python-2.7.17.tgz",
 
 		],
 
@@ -113,5 +113,22 @@
 		],
 
 	},
+
+	"platform:windows" : {
+		"commands": [
+			"xcopy /y /e ..\\..\\patches\\2.7.17",
+			"CALL PCbuild\\build.bat -e -m -v -p=x64 \"/p:PlatformToolset=v140\"",
+			"xcopy /y /E Include {buildDir}\\include\\"
+			"xcopy /y /E Lib {buildDir}\\Lib\\",
+			"cd PCbuild\\amd64",
+			"for /r %%a in (*.dll) do xcopy /y /q \"%%a\" {buildDir}\\DLLs\\ /i",
+			"for /r %%a in (*.pdb) do xcopy /y /q \"%%a\" {buildDir}\\DLLs\\ /i",
+			"for /r %%a in (*.pyd) do xcopy /y /q \"%%a\" {buildDir}\\DLLs\\ /i",
+			"for /r %%a in (*.lib) do xcopy /y /q \"%%a\" {buildDir}\\libs\\ /i",
+			"for /r %%a in (*.exe) do xcopy /y /q \"%%a\" {buildDir}\\ /i",
+			"copy python27.dll {buildDir}\\python27.dll",
+			"copy PC\\pyconfig.h {buildDir}\\include\\pyconfig.h"
+		]
+	}
 
 }
