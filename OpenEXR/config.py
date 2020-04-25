@@ -54,9 +54,35 @@
 		"lib/libPyIex*{sharedLibraryExtension}*",
 		"lib/libPyImath*{sharedLibraryExtension}*",
 
-		"python/iex.so",
-		"python/imath.so",
+		"python/iex.{pythonSharedLibraryExtension}",
+		"python/imath.{pythonSharedLibraryExtension}",
 
 	],
+
+	"platform:windows": {
+		"commands": [
+			"cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			# OpenEXR's CMake setup uses GNUInstallDirs, which unhelpfully
+			# puts the libraries in `lib64`. Coax them back.
+			" -DCMAKE_INSTALL_LIBDIR={buildDirWindows}\\lib"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" -DBoost_NO_SYSTEM_PATHS=TRUE"
+			" -DBoost_NO_BOOST_CMAKE=TRUE"
+			" -DBOOST_ROOT={buildDirWindows}"
+			" -DPython_LIBRARY={buildDirWindows}\\libs\\python27.lib"
+			" -DPython_INCLUDE_DIR={buildDirWindows}\\include"
+			" -DPython2_EXECUTABLE={buildDirWindows}\\python.exe"
+			" ."
+		,
+
+		"cmake --build . --config Release",
+		"cmake --build . --config Release --target INSTALL",
+
+		"mkdir -p {buildDir}/python",
+		"mv {pythonLibDir}/python{pythonVersion}/site-packages/iex{pythonSharedLibraryExtension} {buildDir}/python",
+		"mv {pythonLibDir}/python{pythonVersion}/site-packages/imath{pythonSharedLibraryExtension} {buildDir}/python",
+		]
+	}
 
 }

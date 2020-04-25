@@ -118,15 +118,15 @@
 		"commands": [
 			"xcopy /y /e ..\\..\\patches\\2.7.17",
 			"CALL PCbuild\\build.bat -e -m -v -p=x64 \"/p:PlatformToolset=v140\"",
-			"xcopy /y /E Include {buildDir}\\include\\",
-			"xcopy /y /E Lib {buildDir}\\Lib\\",
-			"for /r PCBuild\\amd64 %a in (*.dll) do xcopy /y /q \"%a\" {buildDir}\\DLLs\\ /i",
-			"for /r PCBuild\\amd64 %a in (*.pdb) do xcopy /y /q \"%a\" {buildDir}\\DLLs\\ /i",
-			"for /r PCBuild\\amd64 %a in (*.pyd) do xcopy /y /q \"%a\" {buildDir}\\DLLs\\ /i",
-			"for /r PCBuild\\amd64 %a in (*.lib) do xcopy /y /q \"%a\" {buildDir}\\libs\\ /i",
-			"for /r PCBuild\\amd64 %a in (*.exe) do xcopy /y /q \"%a\" {buildDir}\\ /i",
-			"copy PCBuild\\amd64\\python27.dll {buildDir}\\python27.dll",
-			"copy PC\\pyconfig.h {buildDir}\\include\\pyconfig.h"
+			"xcopy /y /E Include {buildDirWindows}\\include\\",
+			"xcopy /y /E Lib {buildDirWindows}\\Lib\\",
+			"for /r PCBuild\\amd64 %a in (*.dll) do xcopy /y /q \"%a\" {buildDirWindows}\\DLLs\\ /i",
+			"for /r PCBuild\\amd64 %a in (*.pdb) do xcopy /y /q \"%a\" {buildDirWindows}\\DLLs\\ /i",
+			"for /r PCBuild\\amd64 %a in (*.pyd) do xcopy /y /q \"%a\" {buildDirWindows}\\DLLs\\ /i",
+			"for /r PCBuild\\amd64 %a in (*.lib) do xcopy /y /q \"%a\" {buildDirWindows}\\libs\\ /i",
+			"for /r PCBuild\\amd64 %a in (*.exe) do xcopy /y /q \"%a\" {buildDirWindows}\\ /i",
+			"copy PCBuild\\amd64\\python27.dll {buildDirWindows}\\python27.dll",
+			"copy PC\\pyconfig.h {buildDirWindows}\\include\\pyconfig.h"
 		]
 	}
 

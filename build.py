@@ -452,15 +452,29 @@ for key, value in vars( args ).items() :
 	if key.startswith( "variant:" ) :
 		variants[key[8:]] = value[0]
 
+# Make sure to use forward slashes when possible for consistency.
+buildDir = args.buildDir.replace("\\", "/")
+
 variables = {
-	"buildDir" : args.buildDir,
+	"buildDir" : buildDir,
+	"buildDirWindows": args.buildDir,
 	"jobs" : multiprocessing.cpu_count(),
 	"path" : os.environ["PATH"],
 	"version" : __version,
 	"platform" : "osx" if sys.platform == "darwin" else "linux",
-	"sharedLibraryExtension" : ".dylib" if sys.platform == "darwin" else ".so",
+	#"sharedLibraryExtension" : ".dylib" if sys.platform == "darwin" else ".so",
 	"variants" : "".join( "-{}{}".format( key, variants[key] ) for key in sorted( variants.keys() ) ),
 }
+
+if sys.platform == "darwin":
+	variables["sharedLibraryExtension"] = ".dylib"
+	variables["pythonSharedLibraryExtension"] = ".so"
+elif sys.platform == "win32":
+	variables["sharedLibraryExtension"] = ".dll"
+	variables["pythonSharedLibraryExtension"] = ".pyd"
+else:
+	variables["sharedLibraryExtension"] = ".so"
+	variables["pythonSharedLibraryExtension"] = ".so"
 
 configs = __loadConfigs( variables, variants )
 if args.projects is None :
@@ -470,7 +484,7 @@ if args.projects is None :
 	args.projects = sorted( configs.keys() )
 
 __checkEnvironment( args.projects, configs )
-__buildProjects( args.projects, configs, args.buildDir )
+__buildProjects( args.projects, configs, buildDir )
 
 if args.package :
-	__buildPackage( args.projects, configs, args.buildDir, args.package.format( **variables ) )
+	__buildPackage( args.projects, configs, buildDir, args.package.format( **variables ) )
