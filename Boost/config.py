@@ -38,4 +38,15 @@
 
 	],
 
+	"platform:windows": {
+		"downloads": [
+			"https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.7z"
+		],
+
+		"commands": [
+			"bootstrap.bat",
+			"b2 toolset=msvc-14.1 -a --prefix={buildDir} --abbreviate-paths --address-model=64 --threading=multi --link=shared --variant=release --cxxflags='-std=c++11' --disable-icu --with-python install -j {jobs}"
+		]
+	}
+
 }

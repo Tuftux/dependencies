@@ -101,6 +101,19 @@ def __decompress( archive ) :
 		files = subprocess.check_output( command, stderr=subprocess.STDOUT, shell = True )
 		files = [ f for f in files.split( "\n" ) if f ]
 		files = [ f[2:] if f.startswith( "x " ) else f for f in files ]
+	elif archive.endswith( ".7z" ) :
+		command = r'"C:\Program Files\7-Zip\7z.exe" -y x {} -o"{}"'.format(os.path.abspath(archive), os.getcwd())
+		sys.stderr.write( command + "\n" )
+		subprocess.call(command, stderr=subprocess.STDOUT, shell = True )
+		command = r'"C:\Program Files\7-Zip\7z.exe" l {} -ba -slt | findstr /R /C:"Path = [^/]*$"'.format(os.path.abspath(archive))
+		sys.stderr.write( command + "\n" )
+		output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell = True )
+		files = []
+		for f_n in output.split("\n"):
+			for f in f_n.split("\r"):
+				clean_file_name = f.lstrip("Path = ").replace("\\", "/")
+				if clean_file_name != "":
+					files.append(clean_file_name)
 	else :
 		with tarfile.open( archive, "r:*" ) as f :
 			f.extractall()
@@ -273,17 +286,25 @@ def __buildProject( project, config, buildDir ) :
 		if os.path.exists( archivePath ) :
 			continue
 
-		downloadCommand = "curl -L {0} > {1}".format( download, archivePath )
+		downloadCommand = "curl -L {0} --output {1}".format( download, archivePath )
 		sys.stderr.write( downloadCommand + "\n" )
 		subprocess.check_call( downloadCommand, shell = True )
 
 	workingDir = project + "/working"
+	"""
 	if os.path.exists( workingDir ) :
 		shutil.rmtree( workingDir )
-	os.makedirs( workingDir )
+	"""
+	if not os.path.exists( workingDir ) :
+		os.makedirs( workingDir )
+	
 	os.chdir( workingDir )
-
+	for a in archives:
+		print(os.path.abspath(os.path.join("../../" + a)))
 	decompressedArchives = [ __decompress( "../../" + a ) for a in archives ]
+	print "##########"
+	print decompressedArchives[0]
+	print config.get( "workingDir", decompressedArchives[0] )
 	os.chdir( config.get( "workingDir", decompressedArchives[0] ) )
 
 	if config["license"] is not None :
