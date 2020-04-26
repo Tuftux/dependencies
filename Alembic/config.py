@@ -50,4 +50,25 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" -DBoost_NO_SYSTEM_PATHS=TRUE"
+			" -DBoost_NO_BOOST_CMAKE=TRUE"
+			" -DBOOST_ROOT={buildDirWindows}"
+			" -DILMBASE_ROOT={buildDirWindows}"
+			" -DHDF5_ROOT={buildDirWindows}"
+			" -DALEMBIC_PYILMBASE_INCLUDE_DIRECTORY={buildDirWindows}/include/OpenEXR"
+			" -DUSE_HDF5=TRUE"
+			" -DUSE_ARNOLD=FALSE"
+			" -DUSE_PRMAN=FALSE"
+			" -DUSE_MAYA=FALSE"
+			" .",
+
+		"cmake --build . --config Release",
+		"cmake --build . --config Release --target INSTALL",
+		]
+	}
 }
