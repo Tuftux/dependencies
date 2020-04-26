@@ -2,7 +2,7 @@
 
 	"downloads" : [
 
-		"http://apache.mirror.anlx.net//xerces/c/3/sources/xerces-c-3.2.2.tar.gz"
+		"http://apache.mirror.anlx.net//xerces/c/3/sources/xerces-c-3.2.3.tar.gz"
 
 	],
 
@@ -22,4 +22,15 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" .",
+
+			"cmake --build . --config Release",
+			"cmake --build . --config Release --target INSTALL",
+		]
+	}
 }
