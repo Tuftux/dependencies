@@ -2,7 +2,7 @@
 
 	"downloads" : [
 
-		"https://download.osgeo.org/libtiff/old/tiff-3.8.2.tar.gz",
+		"http://download.osgeo.org/libtiff/tiff-4.1.0.zip",
 
 	],
 
@@ -35,4 +35,15 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" .",
+
+			"cmake --build . --config Release",
+			"cmake --build . --config Release --target INSTALL",
+		]
+	}
 }
