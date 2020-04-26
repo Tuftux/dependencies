@@ -54,8 +54,8 @@
 		"lib/libPyIex*{sharedLibraryExtension}*",
 		"lib/libPyImath*{sharedLibraryExtension}*",
 
-		"python/iex.{pythonSharedLibraryExtension}",
-		"python/imath.{pythonSharedLibraryExtension}",
+		"python/iex{pythonSharedLibraryExtension}",
+		"python/imath{pythonSharedLibraryExtension}",
 
 	],
 
@@ -79,9 +79,9 @@
 		"cmake --build . --config Release",
 		"cmake --build . --config Release --target INSTALL",
 
-		"mkdir -p {buildDir}/python",
-		"mv {pythonLibDir}/python{pythonVersion}/site-packages/iex{pythonSharedLibraryExtension} {buildDir}/python",
-		"mv {pythonLibDir}/python{pythonVersion}/site-packages/imath{pythonSharedLibraryExtension} {buildDir}/python",
+		"if not exist {buildDirWindows}\\python md {buildDirWindows}\\python",
+		"copy python2_7\\Release\\iex{pythonSharedLibraryExtension} {buildDirWindows}\\python\\iex{pythonSharedLibraryExtension}",
+		"copy python2_7\\Release\\imath{pythonSharedLibraryExtension} {buildDirWindows}\\python\\imath{pythonSharedLibraryExtension}"
 		]
 	}
 
