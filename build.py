@@ -93,7 +93,7 @@ def __decompress( archive ) :
 				extracted = f.extract( info.filename )
 				os.chmod( extracted, info.external_attr >> 16 )
 			files = f.namelist()
-	elif archive.endswith( ".tar.xz" ) :
+	elif archive.endswith( ".tar.xz" ) and sys.platform != "win32" :
 		## \todo When we eventually move to Python 3, we can use
 		# the `tarfile` module for this too.
 		command = "tar -xvf {archive}".format( archive=archive )
@@ -101,6 +101,26 @@ def __decompress( archive ) :
 		files = subprocess.check_output( command, stderr=subprocess.STDOUT, shell = True )
 		files = [ f for f in files.split( "\n" ) if f ]
 		files = [ f[2:] if f.startswith( "x " ) else f for f in files ]
+	elif archive.endswith( ".tar.xz" ) :
+		archive_folder = os.path.split(archive)[0]
+		command = r'"C:\Program Files\7-Zip\7z.exe" -y x {} -o"{}"'.format(os.path.abspath(archive), archive_folder)
+		sys.stderr.write( command + "\n" )
+		subprocess.call(command, stderr=subprocess.STDOUT, shell = True )
+
+		archive = archive.replace(".tar.xz", ".tar")
+		command = r'"C:\Program Files\7-Zip\7z.exe" -y x {} -o"{}"'.format(os.path.abspath(archive), os.getcwd())
+		sys.stderr.write( command + "\n" )
+		subprocess.call(command, stderr=subprocess.STDOUT, shell = True )
+
+		command = r'"C:\Program Files\7-Zip\7z.exe" l {} -ba -slt | findstr /R /C:"Path = [^/]*$"'.format(os.path.abspath(archive))
+		sys.stderr.write( command + "\n" )
+		output = subprocess.check_output(command, stderr=subprocess.STDOUT, shell = True )
+		files = []
+		for f_n in output.split("\n"):
+			for f in f_n.split("\r"):
+				clean_file_name = f.lstrip("Path = ").replace("\\", "/")
+				if clean_file_name != "":
+					files.append(clean_file_name)
 	elif archive.endswith( ".7z" ) :
 		command = r'"C:\Program Files\7-Zip\7z.exe" -y x {} -o"{}"'.format(os.path.abspath(archive), os.getcwd())
 		sys.stderr.write( command + "\n" )

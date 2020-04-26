@@ -23,4 +23,19 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"move ..\\cfe* tools\\clang",
+			"if not exist build mkdir build",
+			"cd build &&"
+				" cmake -G \"Visual Studio 15 2017 Win64\""
+				" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+				" -DCMAKE_BUILD_TYPE=Release"
+				" -DLLVM_ENABLE_RTTI=ON"
+				" ..",
+
+			"cd build && cmake --build . --config Release",
+			"cd build && cmake --build . --config Release --target INSTALL",
+		]
+	}
 }
