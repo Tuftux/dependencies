@@ -43,4 +43,27 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"if not exist gafferBuild mkdir gafferBuild",
+			"cd gafferBuild &&"
+				" cmake -G \"Visual Studio 15 2017 Win64\""
+				" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+				" -DCMAKE_INSTALL_LIBDIR={buildDirWindows}\\lib"
+				" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+				" -DUSE_FFMPEG=NO"
+				" -DUSE_PYTHON=NO"
+				# These next two disable `iv`. This fails to
+				# build on Mac due to OpenGL deprecations, and
+				# we've never packaged it anyway.
+				" -DUSE_OPENGL=NO"
+				" -DUSE_QT=NO"
+				" ..",
+
+			"cd gafferBuild && cmake --build . --config Release",
+			"cd gafferBuild && cmake --build . --config Release --target INSTALL",
+
+			"copy {buildDirWindows}\\share\\doc\\OpenImageIO\\openimageio.pdf {buildDirWindows}\\doc\\"
+		]
+	}
 }
