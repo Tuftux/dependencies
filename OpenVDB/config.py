@@ -43,4 +43,27 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"xcopy /y /e ..\\..\\patches\\7.0.0",
+
+			"if not exist build mkdir build",
+			"cd build && cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" -DPython_LIBRARY={buildDirWindows}\\libs\\python27.lib"
+			" -DPython_INCLUDE_DIR={buildDirWindows}\\include"
+			" -DPython_EXECUTABLE={buildDirWindows}\\python.exe"
+			" -DCMAKE_INSTALL_LIBDIR={buildDirWindows}\\lib"
+			" -DOPENVDB_BUILD_PYTHON_MODULE=ON"
+			" -DPYOPENVDB_INSTALL_DIRECTORY={buildDirWindows}\\python"
+			" -DTBB_ROOT={buildDirWindows}"
+			" -DBLOSC_ROOT={buildDirWindows}"
+			" ..",
+
+			"cd build && cmake --build . --config Release",
+			"cd build && cmake --build . --config Release --target INSTALL",
+		]
+	}
+
 }
