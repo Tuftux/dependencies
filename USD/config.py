@@ -69,4 +69,29 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" -DBoost_NO_SYSTEM_PATHS=TRUE"
+			" -DBoost_NO_BOOST_CMAKE=TRUE"
+			" -DPXR_BUILD_IMAGING=FALSE"
+			" -DPXR_BUILD_TESTS=FALSE"
+			" -DPXR_BUILD_ALEMBIC_PLUGIN=TRUE"
+			" -DPXR_ENABLE_HDF5_SUPPORT=FALSE"
+			" -DALEMBIC_DIR={buildDirWindows}\\lib"
+			" -DOPENEXR_LOCATION={buildDirWindows}\\lib"
+			# Disable Python support until USD supports Python 3.
+			" -DPXR_ENABLE_PYTHON_SUPPORT=FALSE"
+			" -DPython_LIBRARY={buildDirWindows}\\libs\\python27.lib"
+			" -DPython_INCLUDE_DIR={buildDirWindows}\\include"
+			" -DPython_EXECUTABLE={buildDirWindows}\\python.exe"
+			" .",
+
+			"cmake --build . --config Release",
+			"cmake --build . --config Release --target INSTALL"
+		]
+	}
+
 }
