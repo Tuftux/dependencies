@@ -40,12 +40,15 @@
 
 	"platform:windows": {
 		"downloads": [
-			"https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.7z"
+			"https://dl.bintray.com/boostorg/release/1.68.0/source/boost_1_68_0.7z",
+			"https://github.com/madler/zlib/archive/v1.2.11.tar.gz"  # Needed for windows to provide boost_zlib*
 		],
 
 		"commands": [
+			"if not exist zlib mkdir zlib",
+			"xcopy /y /E /q /I ..\\zlib-1.2.11 zlib\\",
 			"bootstrap.bat",
-			"b2 toolset=msvc-14.1 -a --prefix={buildDir} --abbreviate-paths --address-model=64 --threading=multi --link=shared --variant=release --cxxflags='-std=c++11' --disable-icu --with-python install -j {jobs}"
+			"b2 toolset=msvc-14.1 -a -sZLIB_SOURCE=\"zlib\" --prefix={buildDir} --abbreviate-paths --address-model=64 --threading=multi --link=shared --variant=release --cxxflags='-std=c++11' --disable-icu --with-iostreams --with-python install -j {jobs}"
 		]
 	}
 
