@@ -2,7 +2,7 @@
 
 	"downloads" : [
 
-		"https://github.com/imageworks/OpenShadingLanguage/archive/Release-1.9.9.tar.gz"
+		"https://github.com/imageworks/OpenShadingLanguage/archive/Release-1.10.9.tar.gz"
 
 	],
 
@@ -47,4 +47,22 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"if not exist gafferBuild mkdir gafferBuild",
+			"cd gafferBuild &&"
+				" cmake -G \"Visual Studio 15 2017 Win64\""
+				" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+				" -DCMAKE_INSTALL_LIBDIR={buildDirWindows}/lib"
+				" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+				" -DSTOP_ON_WARNING=0"
+				" -DENABLERTTI=1"
+				" -DLLVM_STATIC=1"
+				" ..",
+				
+			"set PATH={buildDirWindows}\\bin;%PATH% && cd gafferBuild && cmake --build . --config Release",
+			"set PATH={buildDirWindows}\\bin;%PATH% && cd gafferBuild && cmake --build . --config Release --target INSTALL",
+			"copy {buildDirWindows}\\share\\doc\\OSL\\osl-languagespec.pdf {buildDirWindows}\\doc\\"
+		]
+	}
 }

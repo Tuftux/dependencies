@@ -339,8 +339,9 @@ def __buildProject( project, config, buildDir ) :
 				shutil.rmtree( licenseDest )
 			shutil.copytree( config["license"], licenseDest )
 
-	for patch in glob.glob( "../../patches/*.patch" ) :
-		subprocess.check_call( "patch -p1 < {patch}".format( patch = patch ), shell = True )
+	if sys.platform != "win32" :  # On windows, GNU patch is finicky and requires admin rights.
+		for patch in glob.glob( "../../patches/*.patch" ) :
+			subprocess.check_call( "patch -p1 < {patch}".format( patch = patch ), shell = True )
 
 	environment = os.environ.copy()
 	for k, v in config.get( "environment", {} ).items() :
