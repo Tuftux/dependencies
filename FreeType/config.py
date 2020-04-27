@@ -30,4 +30,20 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"if not exist build mkdir build",
+			# Fix broken CMake install
+			"copy include\\freetype\\config\\ build\\include\\freetype\\config\\",
+			"cd build && cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" -DFT_WITH_HARFBUZZ=OFF"
+			" ..",
+
+			"cd build && cmake --build . --config Release",
+			"cd build && cmake --build . --config Release --target INSTALL"
+		]
+	}
+
 }
