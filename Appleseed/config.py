@@ -2,13 +2,13 @@
 
 	"downloads" : [
 
-		"https://github.com/appleseedhq/appleseed/archive/2.0.5-beta.tar.gz"
+		"https://github.com/appleseedhq/appleseed/archive/2.1.0-beta.tar.gz"
 
 	],
 
 	"license" : "LICENSE.txt",
 
-	"dependencies" : [ "Python", "Xerces", "OpenShadingLanguage", "OpenImageIO", "Boost", "LibPNG", "OpenEXR" ],
+	"dependencies" : [ "Python", "Xerces", "OpenShadingLanguage", "OpenImageIO", "Boost", "LibPNG", "OpenEXR" , "LZ4"],
 
 	"environment" : {
 
@@ -16,7 +16,7 @@
 		# shaders during the build.
 		"DYLD_FALLBACK_LIBRARY_PATH" : "{buildDir}/lib",
 		"LD_LIBRARY_PATH" : "{buildDir}/lib",
-
+		"PATH": "{buildDirWindows}\\bin;{buildDirWindows}\\lib;%PATH%",
 		# Appleseed embeds minizip, which appears to require a later version
 		# of zlib than CentOS 6 provides. These defines disable encryption,
 		# which isn't needed anyway, and fixes the problem.
@@ -95,4 +95,51 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"xcopy /y /e ..\\..\\patches\\2.1.0",
+			"if not exist build mkdir build",
+
+			"cd build &&"
+				" cmake -G \"Visual Studio 15 2017 Win64\""
+				" -DWITH_CLI=ON"
+				" -DWITH_STUDIO=OFF"
+				" -DWITH_TOOLS=OFF"
+				" -DWITH_TESTS=OFF"
+				" -DWITH_SAMPLES=OFF"
+				" -DWITH_DOXYGEN=OFF"
+				" -DWITH_PYTHON=ON"
+				" -DWITH_PYTHON2_BINDINGS={withPython2Bindings}"
+				" -DWITH_PYTHON3_BINDINGS={withPython3Bindings}"
+				" -DUSE_STATIC_BOOST=OFF"
+				" -DUSE_STATIC_OIIO=OFF"
+				" -DUSE_STATIC_OSL=OFF"
+				" -DUSE_STATIC_EXR=OFF"
+				" -DUSE_FIND_PACKAGE_FOR_ZLIB=ON"
+				" -DUSE_FIND_PACKAGE_FOR_EXR=ON"
+				" -DUSE_FIND_PACKAGE_FOR_PNG=ON"
+				" -DUSE_FIND_PACKAGE_FOR_XERCES=ON"
+				" -DUSE_FIND_PACKAGE_FOR_OSL=ON"
+				" -DUSE_FIND_PACKAGE_FOR_OIIO=ON"
+				" -DUSE_FIND_PACKAGE_FOR_OCIO=ON"
+				" -DUSE_FIND_PACKAGE_FOR_LZ4=ON"
+				" -DUSE_SSE=ON"
+				" -DWARNINGS_AS_ERRORS=OFF"
+				" -DOPENEXR_ROOT={buildDirWindows}"
+				" -DILMBASE_ROOT={buildDirWindows}"
+				" -DXERCES_INCLUDE_DIR={buildDirWindows}"
+				" -DXERCES_LIBRARY={buildDirWindows}\\lib\\xerces-c_3.lib"
+				" -DLLVM_LIBS_DIR={buildDir}/lib"
+				" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+				" -DCMAKE_INSTALL_PREFIX={buildDirWindows}\\appleseed"
+				" -DPython_LIBRARY={buildDirWindows}\\libs\\python27.lib"
+				" -DPython_INCLUDE_DIR={buildDirWindows}\\include"
+				" -DPython_EXECUTABLE={buildDirWindows}\\python.exe"
+				" -DBoost_PYTHON_LIBRARY_RELEASE={buildDirWindows}\\lib\\libboost_python{pythonMajorVersion}{pythonMinorVersion}{sharedLibraryExtension}"
+				" ..",
+
+			"cd build && cmake --build . --config Release",
+			"cd build && cmake --build . --config Release --target INSTALL",
+		]
+	}
 }
