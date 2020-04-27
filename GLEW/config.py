@@ -22,4 +22,16 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"cd build\\cmake && cmake -G \"Visual Studio 15 2017 Win64\""
+			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
+			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
+			" .",
+
+			"cd build\\cmake && cmake --build . --config Release",
+			"cd build\\cmake && cmake --build . --config Release --target INSTALL"
+		]
+	}
 }
+
