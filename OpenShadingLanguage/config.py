@@ -8,7 +8,7 @@
 
 	"license" : "LICENSE",
 
-	"dependencies" : [ "OpenImageIO", "LLVM" ],
+	"dependencies" : [ "OpenImageIO", "LLVM" , "Zlib" ],
 
 	"environment" : {
 
@@ -60,8 +60,8 @@
 				" -DLLVM_STATIC=1"
 				" ..",
 				
-			"set PATH={buildDirWindows}\\bin;%PATH% && cd gafferBuild && cmake --build . --config Release",
-			"set PATH={buildDirWindows}\\bin;%PATH% && cd gafferBuild && cmake --build . --config Release --target INSTALL",
+			"set PATH={buildDirWindows}\\bin;{buildDirWindows}\\lib;%CD%\\gafferBuild\\src\\liboslcomp\\Release;%PATH% && cd gafferBuild && cmake --build . --config Release",
+			"set PATH={buildDirWindows}\\bin;{buildDirWindows}\\lib;%CD%\\gafferBuild\\src\\liboslcomp\\Release;%PATH% && cd gafferBuild && cmake --build . --config Release --target INSTALL",
 			"copy {buildDirWindows}\\share\\doc\\OSL\\osl-languagespec.pdf {buildDirWindows}\\doc\\"
 		]
 	}
