@@ -63,11 +63,17 @@
 
 		},
 
-		"variables" : {
+		"commands": [
+			"cd build\\vs2013 && devenv makefile.sln /upgrade",
+			"cd build\\vs2013 && devenv makefile.sln /build \"Release|x64\" /project tbb",
+			"cd build\\vs2013 && devenv makefile.sln /build \"Release|x64\" /project tbbmalloc",
+			"cd build\\vs2013 && devenv makefile.sln /build \"Release|x64\" /project tbbmalloc_proxy",
 
-			"installLibsCommand" : "cp build/windows_*_release/*.dll {buildDir}/lib",
-
-		},
+			"if not exist {buildDirWindows}\\include\\tbb\\ mkdir {buildDirWindows}\\include\\tbb\\",
+			"xcopy /y /E /q /I include\\tbb {buildDirWindows}\\include\\tbb\\",
+			"copy build\\vs2013\\x64\\Release\\*.dll {buildDirWindows}\\lib",
+			"copy build\\vs2013\\x64\\Release\\*.lib {buildDirWindows}\\lib"
+		]
 
 	},
 
