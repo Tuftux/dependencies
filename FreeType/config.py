@@ -8,6 +8,10 @@
 
 	"license" : "docs/FTL.TXT",
 
+	"dependencies" : [
+		"Zlib", "LibPNG"
+	],
+
 	"environment" : {
 
 		"LDFLAGS" : "-L{buildDir}/lib",
@@ -39,6 +43,12 @@
 			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
 			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
 			" -DFT_WITH_HARFBUZZ=OFF"
+			" -DFT_WITH_ZLIB=ON"
+			" -DFT_WITH_PNG=ON"
+			" -DZLIB_ROOT={buildDirWindows}"
+			" -DPNG_LIBRARY={buildDirWindows}\\lib\\libpng16.lib"
+			" -DPNG_INCLUDE_DIR={buildDirWindows}\\include"
+			" -DBUILD_SHARED_LIBS:BOOL=true"  # @Strange
 			" ..",
 
 			"cd build && cmake --build . --config Release",
