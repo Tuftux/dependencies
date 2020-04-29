@@ -20,4 +20,10 @@
 
 	],
 
+	"platform:windows": {
+		"commands": [
+			"xcopy /y /E /q /I resources {buildDirWindows}\resources"
+		]
+	}
+
 }
