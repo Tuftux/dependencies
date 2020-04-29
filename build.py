@@ -13,6 +13,7 @@ import shutil
 import sys
 import tarfile
 import zipfile
+import re
 
 __version = "2.0.0"
 
@@ -87,7 +88,7 @@ def __projects() :
 
 def __decompress( archive ) :
 
-	if os.path.splitext( archive )[1] == ".zip" :
+	if os.path.splitext( archive )[1] == ".zip" and sys.platform != "win32" :
 		with zipfile.ZipFile( archive ) as f :
 			for info in f.infolist() :
 				extracted = f.extract( info.filename )
@@ -118,10 +119,11 @@ def __decompress( archive ) :
 		files = []
 		for f_n in output.split("\n"):
 			for f in f_n.split("\r"):
-				clean_file_name = f.lstrip("Path = ").replace("\\", "/")
+				clean_file_name = re.sub(r'^Path = ', '', f).replace("\\", "/")
 				if clean_file_name != "":
-					files.append(clean_file_name)
-	elif archive.endswith( ".7z" ) :
+					if not clean_file_name.startswith("."):
+						files.append(clean_file_name)
+	elif archive.endswith( ".7z" ) or archive.endswith( ".zip" ) :
 		command = r'"C:\Program Files\7-Zip\7z.exe" -y x {} -o"{}"'.format(os.path.abspath(archive), os.getcwd())
 		sys.stderr.write( command + "\n" )
 		subprocess.call(command, stderr=subprocess.STDOUT, shell = True )
@@ -131,7 +133,7 @@ def __decompress( archive ) :
 		files = []
 		for f_n in output.split("\n"):
 			for f in f_n.split("\r"):
-				clean_file_name = f.lstrip("Path = ").replace("\\", "/")
+				clean_file_name = re.sub(r'^Path = ', '', f).replace("\\", "/")
 				if clean_file_name != "":
 					files.append(clean_file_name)
 	else :
@@ -311,20 +313,19 @@ def __buildProject( project, config, buildDir ) :
 		subprocess.check_call( downloadCommand, shell = True )
 
 	workingDir = project + "/working"
-	"""
+	
 	if os.path.exists( workingDir ) :
-		shutil.rmtree( workingDir )
-	"""
+		try:
+			shutil.rmtree( workingDir )
+		except:
+			if platform.sys == "win32":
+				subprocess.check_call("rmdir /q /s {}".format(os.path.abspath(workingDir)), shell = True )
+
 	if not os.path.exists( workingDir ) :
 		os.makedirs( workingDir )
 	
 	os.chdir( workingDir )
-	for a in archives:
-		print(os.path.abspath(os.path.join("../../" + a)))
 	decompressedArchives = [ __decompress( "../../" + a ) for a in archives ]
-	print "##########"
-	print decompressedArchives[0]
-	print config.get( "workingDir", decompressedArchives[0] )
 	os.chdir( config.get( "workingDir", decompressedArchives[0] ) )
 
 	if config["license"] is not None :
