@@ -124,7 +124,7 @@
 			"for /r PCBuild\\amd64 %a in (*.pdb) do xcopy /y /q \"%a\" {buildDirWindows}\\DLLs\\ /i",
 			"for /r PCBuild\\amd64 %a in (*.pyd) do xcopy /y /q \"%a\" {buildDirWindows}\\DLLs\\ /i",
 			"for /r PCBuild\\amd64 %a in (*.lib) do xcopy /y /q \"%a\" {buildDirWindows}\\libs\\ /i",
-			"for /r PCBuild\\amd64 %a in (*.exe) do xcopy /y /q \"%a\" {buildDirWindows}\\ /i",
+			"for /r PCBuild\\amd64 %a in (*.exe) do xcopy /y /q \"%a\" {buildDirWindows}\\bin\\ /i",
 			"copy PCBuild\\amd64\\python27.dll {buildDirWindows}\\python27.dll",
 			"copy PC\\pyconfig.h {buildDirWindows}\\include\\pyconfig.h"
 		]
