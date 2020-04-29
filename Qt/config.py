@@ -90,11 +90,52 @@
 
 	"platform:windows" : {
 
+		"downloads" : [
+
+			"http://download.qt.io/official_releases/qt/5.12/5.12.8/single/qt-everywhere-src-5.12.8.zip"
+
+		],
+
 		"variables" : {
 
 			"extraArgs" : "",
 
 		},
+
+		"environment" : {
+
+			"PKG_CONFIG_PATH" : "{buildDirWindows}\\lib\\pkgconfig",
+			"PATH": "{buildDirWindows}\\bin;%PATH%",
+			"BUILD_DIR": "{buildDirWindows}"  # We need to store this as a environment variable or the command gets too long and the build fails.
+		},
+
+		"commands": [
+			#"nmake distclean",
+			" configure"
+			" -prefix %BUILD_DIR%"
+			" -plugindir %BUILD_DIR%\\qt\\plugins"
+			" -mp"
+			" -release"
+			" -opensource -confirm-license"
+			" -no-rpath"
+			" -no-dbus"
+			" -skip qtconnectivity"
+			" -skip qtwebengine"
+			" -skip qt3d"
+			" -skip qtdeclarative"
+			" -skip qtwebchannel"
+			" -no-libudev"
+			" -no-icu"
+			" -qt-pcre"
+			" -opengl desktop"
+			" -nomake examples"
+			" -nomake tests"
+			" -I %BUILD_DIR%\\include -I %BUILD_DIR%\\include\\freetype2"
+			" -L %BUILD_DIR%\\lib",
+
+			"nmake",
+			"nmake install"
+		]
 
 	},
 
