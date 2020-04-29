@@ -38,7 +38,7 @@
 		"commands": [
 			"if not exist build mkdir build",
 			# Fix broken CMake install
-			"copy include\\freetype\\config\\ build\\include\\freetype\\config\\",
+			"xcopy /y /e include\\freetype\\config build\\include\\freetype\\config\\",
 			"cd build && cmake -G \"Visual Studio 15 2017 Win64\""
 			" -DCMAKE_INSTALL_PREFIX={buildDirWindows}"
 			" -DCMAKE_PREFIX_PATH={buildDirWindows}"
@@ -48,11 +48,12 @@
 			" -DZLIB_ROOT={buildDirWindows}"
 			" -DPNG_LIBRARY={buildDirWindows}\\lib\\libpng16.lib"
 			" -DPNG_INCLUDE_DIR={buildDirWindows}\\include"
-			" -DBUILD_SHARED_LIBS:BOOL=true"  # @Strange
+			" -DBUILD_SHARED_LIBS:BOOL=true"
 			" ..",
 
 			"cd build && cmake --build . --config Release",
-			"cd build && cmake --build . --config Release --target INSTALL"
+			"cd build && cmake --build . --config Release --target INSTALL",
+			"copy /y build\\Release\\freetype.dll {buildDirWindows}\\bin\\freetype.dll"
 		]
 	}
 
