@@ -318,7 +318,7 @@ def __buildProject( project, config, buildDir ) :
 		try:
 			shutil.rmtree( workingDir )
 		except:
-			if platform.sys == "win32":
+			if sys.platform == "win32":
 				subprocess.check_call("rmdir /q /s {}".format(os.path.abspath(workingDir)), shell = True )
 
 	if not os.path.exists( workingDir ) :
