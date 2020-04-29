@@ -8,15 +8,14 @@
 
 	"license" : "LICENSE",
 
-	"dependencies" : [ "OpenImageIO", "LLVM" , "Zlib" ],
+	"dependencies" : [ "OpenImageIO", "LLVM" , "Zlib" , "FreeType" ],
 
 	"environment" : {
 
 		# Needed because the build process runs oslc, which
 		# needs to link to the OIIO libraries.
 		"DYLD_FALLBACK_LIBRARY_PATH" : "{buildDir}/lib",
-		"LD_LIBRARY_PATH" : "{buildDir}/lib",
-
+		"LD_LIBRARY_PATH" : "{buildDir}/lib"
 	},
 
 	"commands" : [
